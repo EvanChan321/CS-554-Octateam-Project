@@ -1,35 +1,49 @@
+const { fetchGames, fetchGameDetails } = require('../services/rawgService');
+const formatResponse = require('../utils/formatResponse');
+
 /**
- * Get a list of all games (this could use the RAWG API)
+ * Fetch a list of games.
  */
-const getAllGames = async (req, res) => {
-    try {
-      // Simulating a list of games (this would be fetched from RAWG API)
-      const games = [
-        { id: 1, title: 'The Legend of Zelda: Breath of the Wild' },
-        { id: 2, title: 'Elden Ring' },
-        { id: 3, title: 'Super Mario Odyssey' }
-      ];
-  
-      res.status(200).json({ message: 'Games retrieved successfully', games });
-    } catch (error) {
-      res.status(500).json({ message: 'Error retrieving games', error: error.message });
+const getAllGames = async (req, res, next) => {
+  try {
+    const searchQuery = req.query.search || '';
+    const games = await fetchGames(searchQuery);
+    res.status(200).json(formatResponse('Games fetched successfully', games));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Fetch game details by ID.
+ */
+const getGameDetails = async (req, res, next) => {
+  try {
+    const { gameId } = req.params;
+    const gameDetails = await fetchGameDetails(gameId);
+    res.status(200).json(formatResponse('Game details fetched successfully', gameDetails));
+  } catch (error) {
+    next(error);
+  }
+};
+
+const uploadGameImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
     }
-  };
-  
-  /**
-   * Add a comment to a specific game
-   */
-  const addGameComment = async (req, res) => {
-    try {
-      const { gameId } = req.params;
-      const { comment } = req.body;
-  
-      // Here, you'd store the comment in a database
-      res.status(201).json({ message: 'Comment added successfully', gameId, comment });
-    } catch (error) {
-      res.status(500).json({ message: 'Error adding comment', error: error.message });
-    }
-  };
-  
-  module.exports = { getAllGames, addGameComment };
-  
+
+    const fileBuffer = req.file.buffer;
+    const fileName = `game-images/${Date.now()}-${req.file.originalname}`;
+    const mimeType = req.file.mimetype;
+
+    const uploadResult = await uploadFile(fileBuffer, fileName, mimeType);
+    res.status(200).json(formatResponse('File uploaded successfully', { url: uploadResult.Location }));
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { uploadGameImage, getAllGames, getGameDetails };
+

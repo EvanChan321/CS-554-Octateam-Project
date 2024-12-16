@@ -1,40 +1,18 @@
-// Import the express router as shown in the lecture code
-// Note: please do not forget to export the router!
-import {Router} from 'express';
-const router = Router();
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const { uploadGameImage, getAllGames, getGameDetails } = require('../controllers/gameController');
 
-router.route('/')
-  .get(async (req, res) => {   
-    try{
-        const response = await fetch(`https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}`)
-        const { results } = await response.json()
+// Set up multer for file uploads
+const upload = multer({ storage: multer.memoryStorage() });
 
-        return res.status(200).json(results); 
-    }catch(e){
-        return res.status(500).json({error: e})
-    } 
-  })
+// Upload file to AWS S3
+router.post('/upload', upload.single('image'), uploadGameImage);
 
-router.route('/:id')
-  .get(async (req, res) => {
-    try{
-        const id = req.params.id;
-        const response = await fetch(`https://api.rawg.io/api/games/${id}?key=${process.env.RAWG_API_KEY}`)
-        const game = await response.json()
+// Fetch games
+router.get('/', getAllGames);
 
-        return res.status(200).json(game); 
-    }catch(e){
-        return res.status(500).json({error: e})
-    } 
-  })
+// Fetch game details
+router.get('/:gameId', getGameDetails);
 
-
-router.route('/:id/comment')
-    .post(async (req, res) => {
-  
-    })
-    .delete(async (req, res) => {
-  
-    });
-
-export default router;
+module.exports = router;

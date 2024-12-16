@@ -1,7 +1,7 @@
 const admin = require('../config/firebaseConfig');
 
 /**
- * Get user details using Firebase Admin SDK
+ * Get user details using Firebase Admin SDK.
  * @param {string} uid - Firebase User ID
  */
 const getUserById = async (uid) => {
@@ -14,7 +14,7 @@ const getUserById = async (uid) => {
 };
 
 /**
- * Create a custom token for a user
+ * Create a custom token for a user.
  * @param {string} uid - Firebase User ID
  */
 const createCustomToken = async (uid) => {
@@ -26,7 +26,4 @@ const createCustomToken = async (uid) => {
   }
 };
 
-module.exports = {
-  getUserById,
-  createCustomToken
-};
+module.exports = { getUserById, createCustomToken };

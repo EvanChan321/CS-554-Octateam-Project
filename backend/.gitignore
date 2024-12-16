@@ -1,0 +1,41 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Firebase Service Account Key
+config/serviceAccountKey.json
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+build/
+dist/
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Git files to ignore
+.gitignore
+
+# Local files for testing
+*.local
+*.test.local
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Backup files
+*.bak

@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -12,14 +12,14 @@ const s3 = new AWS.S3({
  * @param {string} key - The S3 object key (file name)
  * @returns {Promise}
  */
-const uploadFile = (fileContent, key) => {
+export const uploadFile = async (fileBuffer, fileName, mimeType) => {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
-    Key: key,
-    Body: fileContent
+    Key: fileName,
+    Body: fileBuffer,
+    ContentType: mimeType,
+    ACL: 'public-read',
   };
-
-  return s3.upload(params).promise();
+  const data = await s3.upload(params).promise();
+  return data;
 };
-
-module.exports = { uploadFile };

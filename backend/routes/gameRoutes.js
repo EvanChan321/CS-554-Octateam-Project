@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
+import multer from 'multer';
+import { getAllGames, uploadGameImage, getGameDetails } from '../controllers/gameController.js';
 const router = express.Router();
-const multer = require('multer');
-const { uploadGameImage, getAllGames, getGameDetails } = require('../controllers/gameController');
 
 // Set up multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
@@ -14,5 +14,4 @@ router.get('/', getAllGames);
 
 // Fetch game details
 router.get('/:gameId', getGameDetails);
-
-module.exports = router;
+export default router;

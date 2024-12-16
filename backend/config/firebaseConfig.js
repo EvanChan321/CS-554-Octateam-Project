@@ -1,8 +1,11 @@
-const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json'); // Path to Firebase private key
+import { createRequire } from 'module';
+import admin from 'firebase-admin';
+
+const require = createRequire(import.meta.url);
+const serviceAccount = require('./serviceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-module.exports = admin;
+export default admin;

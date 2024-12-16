@@ -1,4 +1,4 @@
-const admin = require('../config/firebaseConfig');
+import {admin} from '../config/firebaseConfig'
 
 /**
  * Get user details using Firebase Admin SDK.

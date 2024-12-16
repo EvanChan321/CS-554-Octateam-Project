@@ -1,7 +1,4 @@
-/**
- * Fetch user profile details.
- */
-const getUserProfile = (req, res) => {
+export const getUserProfile = (req, res) => {
   try {
     const user = req.user;
     res.status(200).json({
@@ -15,5 +12,3 @@ const getUserProfile = (req, res) => {
     res.status(500).json({ message: 'Error retrieving user profile', error: error.message });
   }
 };
-
-module.exports = { getUserProfile };

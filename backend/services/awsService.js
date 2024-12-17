@@ -7,6 +7,12 @@ const s3 = new AWS.S3({
 });
 
 export const uploadFile = async (fileBuffer, fileName, mimeType) => {
+  console.log('Uploading file to S3:', {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: fileName,
+    ContentType: mimeType
+  });
+  
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: fileName,

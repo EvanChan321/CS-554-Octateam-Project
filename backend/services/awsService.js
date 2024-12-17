@@ -6,12 +6,6 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION
 });
 
-/**
- * Uploads a file to AWS S3
- * @param {Buffer} fileContent - The file content to upload
- * @param {string} key - The S3 object key (file name)
- * @returns {Promise}
- */
 export const uploadFile = async (fileBuffer, fileName, mimeType) => {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
@@ -20,6 +14,7 @@ export const uploadFile = async (fileBuffer, fileName, mimeType) => {
     ContentType: mimeType,
     ACL: 'public-read',
   };
+
   const data = await s3.upload(params).promise();
   return data;
 };

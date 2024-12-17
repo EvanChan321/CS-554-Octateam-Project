@@ -1,17 +1,12 @@
 import express from 'express';
-import multer from 'multer';
-import { getAllGames, uploadGameImage, getGameDetails } from '../controllers/gameController.js';
+import { getAllGames, getGameDetails, rateGame, commentOnGame } from '../controllers/gameController.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
+
 const router = express.Router();
 
-// Set up multer for file uploads
-const upload = multer({ storage: multer.memoryStorage() });
-
-// Upload file to AWS S3
-router.post('/upload', upload.single('image'), uploadGameImage);
-
-// Fetch games
 router.get('/', getAllGames);
-
-// Fetch game details
 router.get('/:gameId', getGameDetails);
+router.post('/:gameId/rate', authMiddleware, rateGame);
+router.post('/:gameId/comment', authMiddleware, commentOnGame);
+
 export default router;

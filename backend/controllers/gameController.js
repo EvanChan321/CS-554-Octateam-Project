@@ -1,23 +1,15 @@
 import { fetchGames, fetchGameDetails } from '../services/rawgService.js';
-import { uploadFile } from '../services/awsService.js';
 import formatResponse from '../utils/formatResponse.js';
 
-/**
- * Fetch a list of games.
- */
 export const getAllGames = async (req, res, next) => {
   try {
-    const searchQuery = req.query.search || '';
-    const games = await fetchGames(searchQuery);
+    const games = await fetchGames(req.query.search);
     res.status(200).json(formatResponse('Games fetched successfully', games));
   } catch (error) {
     next(error);
   }
 };
 
-/**
- * Fetch game details by ID.
- */
 export const getGameDetails = async (req, res, next) => {
   try {
     const { gameId } = req.params;
@@ -28,17 +20,21 @@ export const getGameDetails = async (req, res, next) => {
   }
 };
 
-export const uploadGameImage = async (req, res, next) => {
+export const rateGame = async (req, res, next) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
+    const { gameId } = req.params;
+    const { rating } = req.body;
+    res.status(201).json(formatResponse('Game rated successfully', { gameId, rating }));
+  } catch (error) {
+    next(error);
+  }
+};
 
-    const fileBuffer = req.file.buffer;
-    const fileName = `game-images/${Date.now()}-${req.file.originalname}`;
-    const uploadResult = await uploadFile(fileBuffer, fileName, req.file.mimetype);
-
-    res.status(200).json(formatResponse('File uploaded successfully', { url: uploadResult.Location }));
+export const commentOnGame = async (req, res, next) => {
+  try {
+    const { gameId } = req.params;
+    const { comment } = req.body;
+    res.status(201).json(formatResponse('Comment added successfully', { gameId, comment }));
   } catch (error) {
     next(error);
   }

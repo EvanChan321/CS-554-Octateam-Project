@@ -1,21 +1,31 @@
-
-import { gql } from 'graphql-tag';
+import gql from 'graphql-tag';
 
 export const typeDefs = gql`
   type User {
-    id: ID!
+    uid: ID!
     email: String!
-    createdAt: String!
+    username: String
+    profilePicture: String
+    createdAt: String
+  }
+
+  type Game {
+    gameId: ID!
+    name: String!
+    description: String
+    genre: String
+    createdAt: String
   }
 
   type Query {
-    getUsers: [User!]!
+    getUser(uid: ID!): User
+    getAllUsers: [User]
+    getAllGames: [Game]
+    getGameById(gameId: ID!): Game
   }
 
   type Mutation {
-    signup(email: String!, password: String!): String!
-    login(email: String!, password: String!): String!
+    addUser(email: String!, username: String!): User
+    addGame(gameId: ID!, name: String!, description: String, genre: String): Game
   }
 `;
-
-

@@ -1,0 +1,44 @@
+/my-game-app
+│
+├── /public
+│   ├── /images              # Static assets
+│   ├── favicon.ico          # Favicon
+│
+├── /src
+│   ├── /components          # Reusable components
+│   │   ├── AuthForm.tsx     # Form for login/signup
+│   │   ├── Header.tsx       # Navigation bar
+│   │   ├── GameCard.tsx     # Game card component
+│   │   └── ...              # Other components
+│
+│   ├── /pages
+│   │   ├── /auth
+│   │   │   ├── login.tsx    # Login page
+│   │   │   └── signup.tsx   # Signup page
+│   │   ├── /api
+│   │   │   ├── auth
+│   │   │   │   ├── login.ts # API route for login
+│   │   │   │   └── signup.ts# API route for signup
+│   │   │   └── graphql.ts   # GraphQL server API
+│   │   ├── index.tsx        # Home page
+│   │   └── ...              # Other pages
+│
+│   ├── /lib
+│   │   ├── mongodb.ts       # MongoDB connection logic
+│   │   ├── redis.ts         # Redis connection logic
+│   │   └── graphqlClient.ts # Apollo GraphQL client
+│
+│   ├── /graphql
+│   │   ├── schema.ts        # GraphQL schema
+│   │   └── resolvers.ts     # GraphQL resolvers
+│
+│   ├── /types
+│   │   ├── user.ts          # TypeScript interface for user
+│
+│   ├── /styles
+│   │   ├── globals.css      # Global styles
+│   │   └── Auth.module.css   # Scoped styles for auth pages
+│
+├── .env.local               # Environment variables
+├── package.json             # Dependencies
+└── tsconfig.json            # TypeScript config

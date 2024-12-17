@@ -1,0 +1,1 @@
+// Filter functionality for searching games

@@ -14,12 +14,14 @@ interface GameListProps {
   onAddToList: (id: string) => void;
 }
 
+
+
 export default function GameList({ games, onAddToList }: GameListProps) {
   return (
     <div className={styles.gameList}>
       {games.map((game) => (
         <GameCard
-          key={game.id}
+          id={game.id}
           title={game.title}
           imageUrl={game.imageUrl}
           rating={game.rating}

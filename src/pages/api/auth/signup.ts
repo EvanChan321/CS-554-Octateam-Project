@@ -16,8 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Additional logging before insertion
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log('Password hashed.');
+
+        const favoriteGames: never[] = [];
+        const reviews: never[] = [];
+        const gamesList : never[] = [];
   
-        const result = await usersCollection.insertOne({ email, password: hashedPassword });
+        const result = await usersCollection.insertOne({ email, password: hashedPassword, favoriteGames, reviews, gamesList });
         console.log('User inserted:', result);
   
         res.status(201).json({ message: 'User created successfully.' });

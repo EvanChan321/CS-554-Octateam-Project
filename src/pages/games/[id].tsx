@@ -1,1 +1,0 @@
-// Dynamic route: Individual game details

@@ -1,17 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { games } from '@/lib/mongoCollections';
-
+import { MongoClient } from 'mongodb';
 import redis from '@/lib/redis';
-
-
+import { stringify } from 'querystring';
+import { pages } from 'next/dist/build/templates/app-page';
 
 const RAWG_API_KEY = process.env.RAWG_API_KEY;
 const RAWG_API_URL = 'https://api.rawg.io/api/games';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const cachedGames = await redis.get('featured');
+    const { page = 1 } = req.query;
+    const pageSize = 10;
+    const cachedGames = await redis.get(`gamesList_page_${page}`);
 
     if (cachedGames) {
       return res.status(200).json({ success: true, games: cachedGames });
@@ -20,7 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data } = await axios.get(RAWG_API_URL, {
       params: {
         key: RAWG_API_KEY,
-        page_size: 6,
+        page_size: pageSize,
+        page: page
       },
     });
 
@@ -33,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       rating: game.rating || 0
     }));
 
-    await redis.set('featured', JSON.stringify(gamesData));
+    await redis.set(`gamesList_page_${page}`, JSON.stringify(gamesData));
 
     const gamesCollection = await games();
     for (const game of gamesData) {

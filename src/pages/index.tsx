@@ -12,7 +12,6 @@ type Game = {
   released: string;
   rating: number;
 };
-
 export default function Home() {
   const [featuredGames, setFeaturedGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

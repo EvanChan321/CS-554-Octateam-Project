@@ -1,6 +1,7 @@
 // Navigation bar
 import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
+import Head from 'next/head';
 
 export default function Header() {
   const { user, setUser } = useUser();
@@ -10,6 +11,12 @@ export default function Header() {
   };
 
   return (
+    <>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+      </Head>
     <header className="bg-gray-800 text-white">
       <nav className="container mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex space-x-6 centered">
@@ -18,7 +25,9 @@ export default function Header() {
           <Link href="/lists" className="text-white hover:text-gray-300">My Lists</Link>
           <Link href="/forum" className="text-white hover:text-gray-300">Forum</Link>
         </div>
-
+        <div className=''>
+          <h1 className='font-bold text-3xl font-pixel'>Game Share</h1>
+        </div>
         <div>
           {user ? (
             <button onClick={handleLogout}
@@ -39,5 +48,6 @@ export default function Header() {
         </div>
       </nav>
     </header>
+    </>
   );
 }

@@ -4,7 +4,7 @@ interface RatingStarsProps {
   }
   
   export default function RatingStars({ rating }: RatingStarsProps) {
-    const stars = Array.from({ length: 5 }, (_, i) => i < rating);
+    const stars = Array.from({ length: 5 }, (_, i) => i < Math.round(rating));
   
     return (
       <div>

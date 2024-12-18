@@ -77,16 +77,21 @@ export default function GamesList() {
           )}
         </section>
         
-        <section>
-          <div className="pagination">
+        <section className="flex justify-center items-center py-4">
+          <div className="flex items-center space-x-4">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition-colors ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Previous
             </button>
-            <span>Page {currentPage}</span>
-            <button onClick={() => handlePageChange(currentPage + 1)}>
+            <span className="text-lg font-semibold text-gray-700">Page {currentPage}</span>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={`px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition-colors`}
+            >
               Next
             </button>
           </div>

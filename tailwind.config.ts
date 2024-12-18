@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        pixel: ['VT323', 'monospace'], // font for the Gameshare logo
+      },
     },
   },
   plugins: [],

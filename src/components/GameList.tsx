@@ -1,6 +1,5 @@
 // Component for displaying lists of games
 import GameCard from './GameCard';
-import styles from '../styles/GameList.module.css';
 
 interface Game {
   id: string;
@@ -14,11 +13,9 @@ interface GameListProps {
   onAddToList: (id: string) => void;
 }
 
-
-
 export default function GameList({ games, onAddToList }: GameListProps) {
   return (
-    <div className={styles.gameList}>
+    <div className='gameList'>
       {games.map((game) => (
         <GameCard
           id={game.id}

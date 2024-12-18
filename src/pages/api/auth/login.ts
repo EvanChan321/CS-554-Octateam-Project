@@ -10,13 +10,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
+    
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ message: 'Invalid input type.' });
+    }
+    
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      return res.status(400).json({ message: 'Invalid email format.' });
+    }
+  
+    if (trimmedPassword.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
+    }
 
     try {
-      const signedInUser = await signInWithEmailAndPassword(auth, email, password);
+      const signedInUser = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       // Access the users collection
       const usersCollection = await users();
       // Find the user by email
-      const user = await usersCollection.findOne({ email });
+      const user = await usersCollection.findOne({ trimmedEmail });
       if (!user) {
         return res.status(401).json({ message: 'Invalid email or password.' });
       }

@@ -30,13 +30,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Update a specific thread
     const { title, content } = req.body;
 
-    if (!title && !content) {
-      return res.status(400).json({ message: "Nothing to update" });
+    if (!title || !content) {
+      return res.status(400).json({ message: 'Title and content are required.' });
+    }
+  
+    // Ensure both fields are strings
+    if (typeof title !== 'string' || typeof content !== 'string') {
+      return res.status(400).json({ message: 'Title and content must be strings.' });
+    }
+  
+    // Trim inputs
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
+  
+    // Validate title length (e.g., between 3 and 100 characters)
+    if (trimmedTitle.length < 3 || trimmedTitle.length > 100) {
+      return res.status(400).json({ message: 'Title must be between 3 and 100 characters long.' });
+    }
+  
+    // Validate content length (e.g., between 20 and 2000 characters)
+    if (trimmedContent.length < 20 || trimmedContent.length > 2000) {
+      return res.status(400).json({ message: 'Content must be between 20 and 2000 characters long.' });
     }
 
     const updates: { [key: string]: string } = {};
-    if (title) updates["threads.$.title"] = title;
-    if (content) updates["threads.$.content"] = content;
+    if (trimmedTitle) updates["threads.$.title"] = trimmedTitle;
+    if (trimmedContent) updates["threads.$.content"] = trimmedContent;
 
     const result = await collection.updateOne(
       {

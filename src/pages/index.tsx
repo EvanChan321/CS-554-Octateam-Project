@@ -10,14 +10,6 @@ export default function Home() {
   const { user } = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/auth/login'); // Redirect to login if not authenticated
-    }
-  }, [user, router]);
-
-  if (!user) return null; // Prevent rendering until redirect
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

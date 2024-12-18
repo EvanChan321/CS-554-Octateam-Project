@@ -15,8 +15,10 @@ type Game = {
 
 export default function Home() {
   const [featuredGames, setFeaturedGames] = useState<Game[]>([]);
+  const [filteredGames, setFilteredGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Fetch Featured Games
   useEffect(() => {
     const fetchFeaturedGames = async () => {
       try {
@@ -24,6 +26,7 @@ export default function Home() {
         const data = await response.json();
         if (data.success) {
           setFeaturedGames(data.games);
+          setFilteredGames(data.games); // Initialize filtered games
         } else {
           console.error('Failed to load games:', data.message);
         }
@@ -37,30 +40,48 @@ export default function Home() {
     fetchFeaturedGames();
   }, []);
 
+  // Handle Search and Filtering
+  const handleSearch = async (query: string, genre: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/games/search?query=${query}&genre=${genre}`
+      );
+      const data = await response.json();
+      if (data.success) {
+        setFilteredGames(data.games);
+      } else {
+        console.error('Failed to fetch filtered games:', data.message);
+      }
+    } catch (error) {
+      console.error('Error searching games:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
 
       <main className="flex-1 p-4">
-        {}
         <section>
           <h1 className="text-3xl font-bold mb-4">Discover Your Next Game</h1>
-          <Filterbar />
+          <Filterbar onSearch={handleSearch} />
         </section>
 
-        {}
         <section>
           <h2 className="text-2xl font-semibold mt-8 mb-4">Featured Games</h2>
           {loading ? (
             <p>Loading...</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {featuredGames.map((game) => (
+              {filteredGames.map((game) => (
                 <GameCard
                   key={game.gameId}
                   id={game.gameId}
                   title={game.name}
-                  imageUrl={game.background_image} 
+                  imageUrl={game.background_image}
                   rating={game.rating}
                 />
               ))}

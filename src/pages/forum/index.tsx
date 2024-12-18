@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "@/styles/Forum.module.css";
+import Header from "@/components/Header";
 
 export default function ForumList() {
   const [forums, setForums] = useState([]);
@@ -40,40 +40,60 @@ export default function ForumList() {
   };
 
   return (
-    <div className={styles.forumContainer}>
-      <h1 className={styles.forumTitle}>Forums</h1>
-      <ul className={styles.forumList}>
+    <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
+      <Header />
+
+      <h1 className="text-4xl font-bold text-gray-800 text-center mb-6">Forums</h1>
+
+      <ul className="space-y-4">
         {forums.map((forum: any) => (
-          <li key={forum._id} className={styles.forumItem}>
-            <Link href={`/forum/${forum._id}`}>{forum.name}</Link>
+          <li key={forum._id} className="bg-white shadow rounded-md p-4 hover:bg-gray-50 transition duration-200">
+            <Link href={`/forum/${forum._id}`} className="text-lg font-semibold text-blue-600 hover:underline">
+              {forum.name}
+            </Link>
           </li>
         ))}
       </ul>
 
-      <button className={styles.formButton} onClick={() => setShowForm(!showForm)}>
-        {showForm ? "Cancel" : "Create Forum"}
-      </button>
+      <div className="mt-6 flex justify-center">
+        <button
+          className={`${
+            showForm ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
+          } text-white px-6 py-2 rounded-md transition duration-200`}
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? 'Cancel' : 'Create Forum'}
+        </button>
+      </div>
 
       {showForm && (
-        <form className={styles.formContainer} onSubmit={handleCreateForum}>
+        <form
+          className="mt-6 bg-white shadow-md rounded-md p-6 space-y-4"
+          onSubmit={handleCreateForum}
+        >
           <input
             type="text"
-            className={styles.formInput}
+            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Forum Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <textarea
-            className={styles.formTextarea}
+            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <button type="submit" className={styles.formButton}>
-            Create
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-md transition duration-200"
+            >
+              Create
+            </button>
+          </div>
         </form>
       )}
     </div>

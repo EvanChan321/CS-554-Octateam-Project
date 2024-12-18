@@ -1,8 +1,8 @@
 import { MongoClient, Db, MongoClientOptions } from 'mongodb';
 import { mongoConfig } from './settings';
 
-let _connection: MongoClient | undefined = undefined; // Explicitly type as MongoClient
-let _db: Db | undefined = undefined; // Explicitly type as Db
+let _connection: MongoClient | undefined = undefined;
+let _db: Db | undefined = undefined;
 
 const dbConnection = async (): Promise<Db> => {
   if (!_connection) {
@@ -12,7 +12,9 @@ const dbConnection = async (): Promise<Db> => {
     } as MongoClientOptions);
     _db = _connection.db(mongoConfig.database);
   }
-
+  if (!_db) {
+    throw new Error("Failed to establish a database connection.");
+  }
   return _db;
 };
 

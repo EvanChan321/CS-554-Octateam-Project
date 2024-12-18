@@ -17,6 +17,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/firebase": "^3.2.1",
     "@eslint/eslintrc": "^3",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",

@@ -1,4 +1,4 @@
-import { dbConnection } from './mongoConnection.js';
+import { dbConnection } from './mongoConnection';
 import { Collection, Db } from 'mongodb'; // Import MongoDB types
 
 /* This will allow you to have one reference to each collection per app */

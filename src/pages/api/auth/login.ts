@@ -1,36 +1,29 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import bcrypt from 'bcrypt';
-import { users } from '@/lib/mongoCollections';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-
+    console.log(`Login request received for: ${email}`);
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     try {
-      // Access the users collection
-      const usersCollection = await users();
+      // Firebase sign-in
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('Login successful:', userCredential.user);
 
-      // Find the user by email
-      const user = await usersCollection.findOne({ email });
+      // Get the Firebase ID token for the user
+      const idToken = await userCredential.user.getIdToken();
 
-      if (!user) {
-        return res.status(401).json({ message: 'Invalid email or password.' });
-      }
-
-      // Compare the password with the stored hash
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid email or password.' });
-      }
-
-      // Return the user's email (and optionally other non-sensitive info)
-      res.status(200).json({ user: { email: user.email } });
+      // Send the ID token to the client (you can also send user data if needed)
+      res.status(200).json({ token: idToken });
     } catch (error) {
+      if (error === 'auth/user-not-found' || error === 'auth/wrong-password') {
+        return res.status(401).json({ message: 'Invalid email or password.' });
+      }
       console.error('Error logging in:', error);
       res.status(500).json({ message: 'Internal server error.' });
     }

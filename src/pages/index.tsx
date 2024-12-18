@@ -59,7 +59,6 @@ export default function Home() {
                   key={game.gameId}
                   title={game.name}
                   description={game.description}
-                  image={game.background_image}
                   releaseDate={game.released}
                 />
               ))}

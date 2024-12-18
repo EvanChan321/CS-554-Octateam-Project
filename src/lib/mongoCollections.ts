@@ -1,14 +1,14 @@
-import {dbConnection} from './mongoConnection.js';
+import { dbConnection } from './mongoConnection.js';
+import { Collection, Db } from 'mongodb'; // Import MongoDB types
 
 /* This will allow you to have one reference to each collection per app */
-/* Feel free to copy and paste this this */
-const getCollectionFn = (collection) => {
-  let _col = undefined;
+const getCollectionFn = (collection: string): (() => Promise<Collection>) => {
+  let _col: Collection | undefined = undefined;
 
   return async () => {
     if (!_col) {
-      const db = await dbConnection();
-      _col = await db.collection(collection);
+      const db: Db = await dbConnection();
+      _col = db.collection(collection);
     }
 
     return _col;

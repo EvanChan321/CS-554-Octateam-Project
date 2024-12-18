@@ -22,7 +22,7 @@ export default function Header() {
         <div className="flex space-x-6 centered">
           <Link href="/" className="text-white hover:text-gray-300">Home</Link>
           <Link href="/games" className="text-white hover:text-gray-300">Games</Link>
-          <Link href="/lists" className="text-white hover:text-gray-300">My Lists</Link>
+          {user && <Link href="/lists" className="text-white hover:text-gray-300">My Lists</Link>}
           <Link href="/forum" className="text-white hover:text-gray-300">Forum</Link>
         </div>
         <div className=''>

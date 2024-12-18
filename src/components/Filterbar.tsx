@@ -16,8 +16,11 @@ export default function Filterbar({ onSearch }: FilterbarProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-4">
-      {/* Search Bar */}
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col md:flex-row items-center gap-4 bg-gray-100 p-4 rounded shadow"
+    >
+      {/* Search Input */}
       <input
         type="text"
         placeholder="Search for games..."
@@ -26,11 +29,11 @@ export default function Filterbar({ onSearch }: FilterbarProps) {
         className="border p-2 rounded w-full md:w-1/2"
       />
 
-      {/* Genre Filter */}
+      {/* Genre Dropdown */}
       <select
         value={selectedGenre}
         onChange={(e) => setSelectedGenre(e.target.value)}
-        className="border p-2 rounded"
+        className="border p-2 rounded w-full md:w-1/4"
       >
         {genres.map((genre) => (
           <option key={genre} value={genre}>

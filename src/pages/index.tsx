@@ -1,73 +1,97 @@
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useState } from 'react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import Filterbar from '@/components/Filterbar';
 import GameCard from '@/components/GameCard';
-import Footer from '@/components/Footer';
 
 type Game = {
-  gameId: string;
+  id: string;
   name: string;
-  description: string;
   background_image: string;
   released: string;
   rating: number;
 };
-export default function Home() {
-  const [featuredGames, setFeaturedGames] = useState<Game[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchFeaturedGames = async () => {
-      try {
-        const response = await fetch('/api/games/featured');
-        const data = await response.json();
-        if (data.success) {
-          setFeaturedGames(data.games);
-        } else {
-          console.error('Failed to load games:', data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching games:', error);
-      } finally {
-        setLoading(false);
+interface HomeProps {
+  initialGames: Game[];
+}
+
+export default function Home({ initialGames }: HomeProps) {
+  const [games, setGames] = useState<Game[]>(initialGames);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSearch = async (query: string, genre: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `/api/games/search?query=${query}&genre=${genre}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        setGames(data.games);
+      } else {
+        setError('No games found.');
       }
-    };
+    } catch (err) {
+      setError('Error fetching games. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchFeaturedGames();
-  }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-
       <main className="flex-1 p-4">
-        {}
-        <section>
-          <h1 className="text-3xl font-bold mb-4">Discover Your Next Game</h1>
-          <Filterbar />
-        </section>
+        <h1 className="text-3xl font-bold mb-4">Discover Your Next Game</h1>
+        <Filterbar onSearch={handleSearch} />
 
-        {}
-        <section>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Featured Games</h2>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {featuredGames.map((game) => (
-                <GameCard
-                  key={game.gameId}
-                  id={game.gameId}
-                  title={game.name}
-                  imageUrl={game.background_image} 
-                  rating={game.rating}
-                />
-              ))}
-            </div>
-          )}
-        </section>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {games.map((game) => (
+              <GameCard
+                key={game.id}
+                title={game.name}
+                imageUrl={game.background_image || '/placeholder.jpg'}
+                rating={game.rating}
+              />
+            ))}
+          </div>
+        )}
       </main>
-
       <Footer />
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const apiKey = process.env.RAWG_API_KEY;
+    const response = await fetch(
+      `https://api.rawg.io/api/games?key=${apiKey}&page_size=10`
+    );
+    const data = await response.json();
+
+    return {
+      props: {
+        initialGames: data.results || [],
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching featured games:', error);
+    return {
+      props: {
+        initialGames: [],
+      },
+    };
+  }
+};

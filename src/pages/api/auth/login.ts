@@ -27,12 +27,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
     }
 
+    console.log("Pass Error Checking")
     try {
       const signedInUser = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       // Access the users collection
       const usersCollection = await users();
       // Find the user by email
-      const user = await usersCollection.findOne({ trimmedEmail });
+      const user = await usersCollection.findOne({ email: trimmedEmail });
       if (!user) {
         return res.status(401).json({ message: 'Invalid email or password.' });
       }

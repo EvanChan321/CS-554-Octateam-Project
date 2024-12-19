@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 
+type Forum = {
+  _id: string;
+  name: string;
+  description: string;
+};
+
 export default function ForumList() {
-  const [forums, setForums] = useState([]);
+  const [forums, setForums] = useState<Forum[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -12,12 +18,7 @@ export default function ForumList() {
     async function fetchForums() {
       const response = await fetch("/api/forum");
       const data = await response.json();
-      const { forums } = data
-      if(forums) {
-        setForums(forums)
-      } else {
-        setForums(data);
-      }
+      setForums(data);
     }
     fetchForums();
   }, []);
@@ -34,7 +35,7 @@ export default function ForumList() {
         console.error("Failed to create forum");
         return;
       }
-      const newForum = await response.json();
+      const newForum: Forum = await response.json();
       setForums((prevForums) => [...prevForums, newForum]);
       setShowForm(false);
       setName("");
@@ -51,9 +52,12 @@ export default function ForumList() {
       <h1 className="text-4xl font-bold text-gray-800 text-center mb-6">Forums</h1>
 
       <ul className="space-y-4">
-        {forums.map((forum: any) => (
-          <li key={forum._id} className="bg-white shadow rounded-md p-4 hover:bg-gray-50 transition duration-200">
-            <Link href={`/forum/${forum._id}`} >
+        {forums.map((forum) => (
+          <li
+            key={forum._id}
+            className="bg-white shadow rounded-md p-4 hover:bg-gray-50 transition duration-200"
+          >
+            <Link href={`/forum/${forum._id}`} className="text-lg font-semibold text-blue-600 hover:underline">
               {forum.name}
             </Link>
           </li>
@@ -63,11 +67,11 @@ export default function ForumList() {
       <div className="mt-6 flex justify-center">
         <button
           className={`${
-            showForm ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
+            showForm ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"
           } text-white px-6 py-2 rounded-md transition duration-200`}
           onClick={() => setShowForm(!showForm)}
         >
-          {showForm ? 'Cancel' : 'Create Forum'}
+          {showForm ? "Cancel" : "Create Forum"}
         </button>
       </div>
 

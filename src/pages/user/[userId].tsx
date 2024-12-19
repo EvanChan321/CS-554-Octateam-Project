@@ -34,54 +34,70 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-          <Header />
-    <div className="profile">
-      <h1>{userData.email}</h1>
-      <h2>Favorite Games:</h2>
-      <ul>
-        {userData.favoriteGames.length === 0 ? (
-          <li>No favorite games</li>
-        ) : (
-          userData.favoriteGames.map((game: string, index: number) => (
-            <li key={index}>{game}</li>
-          ))
-        )}
-      </ul>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <Header />
+      <div className="flex-1 bg-white rounded-lg shadow-md text-center mt-5">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">{userData.email}</h1>
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Favorite Games:</h2>
+          <ul className="space-y-2">
+            {userData.favoriteGames.length === 0 ? (
+              <li className="text-gray-500">No favorite games</li>
+            ) : (
+              userData.favoriteGames.map((game: string, index: number) => (
+                <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
+                  {game}
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
 
-      <h2>Reviews:</h2>
-      <ul>
-        {userData.reviews.length === 0 ? (
-          <li>No reviews</li>
-        ) : (
-          userData.reviews.map((review: string, index: number) => (
-            <li key={index}>{review}</li>
-          ))
-        )}
-      </ul>
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Reviews:</h2>
+          <ul className="space-y-2">
+            {userData.reviews.length === 0 ? (
+              <li className="text-gray-500">No reviews</li>
+            ) : (
+              userData.reviews.map((review: string, index: number) => (
+                <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
+                  {review}
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
 
-      <h2>Games List:</h2>
-      <ul>
-        {userData.gamesList.length === 0 ? (
-          <li>No games in list</li>
-        ) : (
-          userData.gamesList.map((game: string, index: number) => (
-            <li key={index}>{game}</li>
-          ))
-        )}
-      </ul>
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Games List:</h2>
+          <ul className="space-y-2">
+            {userData.gamesList.length === 0 ? (
+              <li className="text-gray-500">No games in list</li>
+            ) : (
+              userData.gamesList.map((game: string, index: number) => (
+                <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
+                  {game}
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
 
-      <h2>Forums List:</h2>
-      <ul>
-        {userData.forumsList.length === 0 ? (
-          <li>No forums in list</li>
-        ) : (
-          userData.forumsList.map((forum: string, index: number) => (
-            <li key={index}>{forum}</li>
-          ))
-        )}
-      </ul>
-    </div>
+        <section>
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Forums List:</h2>
+          <ul className="space-y-2">
+            {userData.forumsList.length === 0 ? (
+              <li className="text-gray-500">No forums in list</li>
+            ) : (
+              userData.forumsList.map((forum: string, index: number) => (
+                <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
+                  {forum}
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 };

@@ -1,18 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { forumPosts } from "@/lib/mongoCollections";
 import { ObjectId } from "mongodb";
-import redis from '@/lib/redis'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const collection = await forumPosts();
 
   if (req.method === "GET") {
-    const cachedForums = await redis.get(`forumsList`);
-    if (cachedForums) {
-      return res.status(200).json({forums: cachedForums });  
-    }
-    const forums = await collection.find({}).toArray();
-    await redis.set(`forumsList`, JSON.stringify(forums));
+    const forums = await collection.find().toArray();
     return res.status(200).json(forums);
   }
 

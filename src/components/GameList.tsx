@@ -18,6 +18,7 @@ export default function GameList({ games, onAddToList }: GameListProps) {
     <div className='gameList'>
       {games.map((game) => (
         <GameCard
+          key={game.id}
           id={game.id}
           title={game.title}
           imageUrl={game.imageUrl}

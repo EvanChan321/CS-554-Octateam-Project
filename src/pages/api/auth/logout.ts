@@ -14,9 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Set-Cookie', 'session=; Max-Age=0; HttpOnly; Path=/; Secure; SameSite=Strict');
 
       res.status(200).json({ success: true, message: 'User logged out successfully' });
-    } catch (error: any) {
-      console.error('Error during logout:', error.message);
-      res.status(500).json({ success: false, message: error.message });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      res.status(500).json({ success: false, message: error });
     }
   } else {
     res.status(405).json({ success: false, message: 'Method Not Allowed' });

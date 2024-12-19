@@ -20,7 +20,6 @@ export default function Header() {
         }
       } catch (error) {
         setIsLoggedIn(false); 
-        console.log(error);
       }
     };
 
@@ -53,11 +52,6 @@ export default function Header() {
             <Link href="/games" className="text-white hover:text-gray-300">
               Games
             </Link>
-            {isLoggedIn && userId && (
-              <Link href={`/lists/${userId}`} className="text-white hover:text-gray-300">
-                My Lists
-              </Link>
-            )}
             {isLoggedIn && userId && (
               <Link href={`/favorites/${userId}`} className="text-white hover:text-gray-300">
                 Favorite Games

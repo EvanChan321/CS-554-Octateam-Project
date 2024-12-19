@@ -19,7 +19,7 @@ export default function CreateThread() {
         body: JSON.stringify({
           title,
           content,
-          createdBy: "user@example.com", // Replace with authenticated user
+          createdBy: "user@example.com", 
         }),
       });
 

@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log("Pass Error Checking")
     try {
-      const signedInUser = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
+      await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       // Access the users collection
       const usersCollection = await users();
       // Find the user by email

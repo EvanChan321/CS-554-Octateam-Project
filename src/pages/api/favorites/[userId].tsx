@@ -5,8 +5,6 @@ import { ObjectId } from 'mongodb';
 import redis from '@/lib/redis';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { userId } = req.query;
-
   if (req.method === 'GET') {
     try {
       const rawCookies = req.headers.cookie || '';

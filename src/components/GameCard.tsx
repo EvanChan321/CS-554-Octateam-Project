@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import RatingStars from './RatingStars';
-import { useUser } from '../context/UserContext';
 
 interface GameCardProps {
   id: string;

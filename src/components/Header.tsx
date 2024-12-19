@@ -20,6 +20,7 @@ export default function Header() {
         }
       } catch (error) {
         setIsLoggedIn(false); 
+        console.log(error);
       }
     };
 

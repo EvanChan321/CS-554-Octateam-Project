@@ -37,6 +37,7 @@ export default function Signup() {
       router.push('/auth/login'); // Redirect to login on success
     } catch (err) {
       setError('An error occurred. Please try again.');
+      console.log(err);
     }
   };
   

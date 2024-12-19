@@ -1,10 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { games } from '@/lib/mongoCollections';
-import { MongoClient } from 'mongodb';
 import redis from '@/lib/redis';
-import { stringify } from 'querystring';
-import { pages } from 'next/dist/build/templates/app-page';
 
 const RAWG_API_KEY = process.env.RAWG_API_KEY;
 const RAWG_API_URL = 'https://api.rawg.io/api/games';

@@ -30,6 +30,7 @@ export default function Login() {
       router.push('/'); // Redirect to homepage
     } catch (err) {
       setError('Something went wrong. Please try again.');
+      console.log(err);
     }
   };
 
@@ -72,8 +73,4 @@ export default function Login() {
       </form>
     </div>
   );
-}
-
-function encrypt(arg0: { user: any; }) {
-  throw new Error('Function not implemented.');
 }

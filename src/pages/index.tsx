@@ -28,7 +28,8 @@ export default function Home() {
         const data = await response.json();
         if (data.success) {
           setFeaturedGames(data.games);
-          setFilteredGames(data.games); // Initialize filtered games
+          setFilteredGames(data.games); 
+          console.log(featuredGames);
         } else {
           console.error('Failed to load games:', data.message);
         }

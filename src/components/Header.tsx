@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null); // Store the user ID
 
   useEffect(() => {
     const checkSession = async () => {
@@ -12,6 +13,8 @@ export default function Header() {
         const res = await axios.get('/api/check-session');
         if (res.status === 200 && res.data.loggedIn) {
           setIsLoggedIn(true);
+          setUserId(res.data.userId); // Set user ID if logged in
+          console.log(res.data.userId);
         } else {
           setIsLoggedIn(false);
         }
@@ -27,6 +30,7 @@ export default function Header() {
     try {
       await axios.post('/api/auth/logout');
       setIsLoggedIn(false); 
+      setUserId(null); // Clear user ID on logout
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -56,6 +60,11 @@ export default function Header() {
             <Link href="/forum" className="text-white hover:text-gray-300">
               Forum
             </Link>
+            {isLoggedIn && userId && (
+              <Link href={`/user/${userId}`} className="text-white hover:text-gray-300">
+                My Profile
+              </Link>
+            )}
           </div>
           <div className="">
             <h1 className="font-bold text-3xl font-pixel">Game Share</h1>

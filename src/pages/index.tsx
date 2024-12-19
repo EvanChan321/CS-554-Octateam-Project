@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Filterbar from '@/components/Filterbar';
 import GameCard from '@/components/GameCard';
 import Footer from '@/components/Footer';
+import { useUser } from '../context/UserContext';
 
 type Game = {
   gameId: string;
@@ -17,6 +18,7 @@ export default function Home() {
   const [featuredGames, setFeaturedGames] = useState<Game[]>([]);
   const [filteredGames, setFilteredGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { user } = useUser();
 
   // Fetch Featured Games
   useEffect(() => {
@@ -39,6 +41,25 @@ export default function Home() {
 
     fetchFeaturedGames();
   }, []);
+
+  const handleAddToList = async (game) => {
+    if (!user) return;
+
+    try {
+      const response = await fetch(`/api/lists/${user.uid}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(game),
+      });
+
+      const data = await response.json();
+      if (!data.success) {
+        console.error('Failed to add game:', data.message);
+      }
+    } catch (error) {
+      console.error('Error adding game:', error);
+    }
+  };
 
   // Handle Search and Filtering
   const handleSearch = async (query: string, genre: string) => {
@@ -83,7 +104,8 @@ export default function Home() {
                   title={game.name}
                   imageUrl={game.background_image}
                   rating={game.rating}
-                />
+                  onAddToList={() => handleAddToList(game)}
+                /> 
               ))}
             </div>
           )}

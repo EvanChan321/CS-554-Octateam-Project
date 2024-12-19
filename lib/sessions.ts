@@ -1,5 +1,6 @@
+import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
-
+import { SessionPayload } from '@/app/lib/definitions'
  
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
@@ -8,7 +9,7 @@ export async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('1d')
+    .setExpirationTime('7d')
     .sign(encodedKey)
 }
  

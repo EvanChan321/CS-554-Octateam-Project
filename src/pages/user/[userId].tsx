@@ -8,14 +8,14 @@ const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { userId } = router.query; 
+  const { userId } = router.query;
 
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
           const response = await axios.get(`/api/user/${userId}`);
-          setUserData(response.data.user); 
+          setUserData(response.data.user);
         } catch (error) {
           console.error('Error fetching user data:', error);
           setError('Failed to load user data');
@@ -26,11 +26,11 @@ const UserProfile = () => {
   }, [userId]);
 
   if (error) {
-    return <div>{error}</div>; 
+    return <div>{error}</div>;
   }
 
   if (!userData) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -44,9 +44,9 @@ const UserProfile = () => {
             {userData.favoriteGames.length === 0 ? (
               <li className="text-gray-500">No favorite games</li>
             ) : (
-              userData.favoriteGames.map((game: string, index: number) => (
+              userData.favoriteGames.map((game: { name: string }, index: number) => (
                 <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
-                  {game}
+                  {game.name}
                 </li>
               ))
             )}
@@ -74,9 +74,13 @@ const UserProfile = () => {
             {userData.gamesList.length === 0 ? (
               <li className="text-gray-500">No games in list</li>
             ) : (
-              userData.gamesList.map((game: string, index: number) => (
+              userData.gamesList.map((game: { gameId: string, name: string, description: string, background_image: string, released: string, rating: number }, index: number) => (
                 <li key={index} className="p-2 bg-gray-100 rounded-md shadow-sm text-gray-700">
-                  {game}
+                  <h3 className="font-semibold">{game.name}</h3>
+                  <p>{game.description}</p>
+                  <p>Released: {game.released}</p>
+                  <p>Rating: {game.rating}</p>
+                  {game.background_image && <img src={game.background_image} alt={game.name} className="w-32 h-32 object-cover" />}
                 </li>
               ))
             )}

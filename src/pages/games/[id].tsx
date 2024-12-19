@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type Game = {
   gameId: string;
@@ -52,19 +54,48 @@ export default function GamesDetails() {
     return <p>Game not found.</p>;
   }
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      <main className="flex-1 p-4">
-        <h1 className="text-3xl font-bold">{game.name}</h1>
-        <img src={game.background_image} alt={game.name} className="w-full h-auto" />
-        <p>{game.description}</p>
-        <p>Released: {game.released}</p>
-        <p>Rating: {game.rating}/5</p>
-        <p>Rating Count: {game.ratings_count}</p>
-        <p>ESRB Rating: {game.esrb_rating}</p>
-        <a href={game.website} target="_blank" rel="noopener noreferrer">
-          Visit Website
-        </a>
+      <main className="flex-1 p-6 mx-auto bg-white rounded-lg shadow-md">
+        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">{game.name}</h1>
+        <div className="relative w-full h-64 mb-6">
+          <Image
+            src={game.background_image}
+            alt={game.name}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg"
+          />
+        </div>
+        <div className="text-gray-700 space-y-4">
+        <div className="flex flex-wrap items-center justify-between mt-4 text-2xl">
+            <p className="font-semibold">
+              <span className="text-gray-900">Released:</span> {game.released}
+            </p>
+            <p className="font-semibold">
+              <span className="text-gray-900">Rating:</span> {game.rating}/5
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-between text-2xl">
+            <p className="font-semibold">
+              <span className="text-gray-900">Rating Count:</span> {game.ratings_count}
+            </p>
+            <p className="font-semibold">
+              <span className="text-gray-900">ESRB Rating:</span> {game.esrb_rating || "Not Rated"}
+            </p>
+          </div>
+          <p className="text-lg">{game.description}</p>
+          <div className="mt-4">
+            <Link
+              href={game.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block font-semibold underline text-blue-500"
+            >
+              Visit Website
+            </Link>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

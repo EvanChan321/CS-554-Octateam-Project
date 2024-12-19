@@ -73,3 +73,7 @@ export default function Login() {
     </div>
   );
 }
+
+function encrypt(arg0: { user: any; }) {
+  throw new Error('Function not implemented.');
+}

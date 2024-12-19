@@ -1,9 +1,5 @@
-import { dbConnection, closeConnection } from "@/lib/mongoConnection";
-
-const db = await dbConnection();
-await db.collection("forumposts").drop();
-await db.collection("games").drop();
-await db.collection("users")
+import { MongoClient, Db, MongoClientOptions } from 'mongodb';
+import { mongoConfig } from './settings';
 
 let _connection: MongoClient | undefined = undefined;
 let _db: Db | undefined = undefined;

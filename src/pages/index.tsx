@@ -59,7 +59,6 @@ export default function Home() {
       setLoading(false);
     }
   };
-
   // Placeholder function for onAddToList
   const handleAddToList = (gameId: string) => {
     console.log(`Game added to list: ${gameId}`);

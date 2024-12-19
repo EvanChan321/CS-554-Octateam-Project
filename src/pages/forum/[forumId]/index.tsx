@@ -11,7 +11,7 @@ export default function ForumDetails() {
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    if (forumId) {
+    if (typeof forumId === "string") {
       async function fetchForum() {
         const response = await fetch(`/api/forum/${forumId}`);
         const data = await response.json();
@@ -61,11 +61,8 @@ export default function ForumDetails() {
             {modal ? "Close" : "Create a new Thread"}
           </button>
         </div>
-        {modal && (
-          <CreateThread
-            forumId={forumId}
-            handleNewThread={handleNewThread}
-          />
+        {modal && typeof forumId === "string" && (
+          <CreateThread forumId={forumId} handleNewThread={handleNewThread} />
         )}
       </div>
     </>

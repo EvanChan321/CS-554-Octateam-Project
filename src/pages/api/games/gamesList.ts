@@ -12,7 +12,7 @@ const RAWG_API_URL = 'https://api.rawg.io/api/games';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { page = 1 } = req.query;
-    const pageSize = 10;
+    const pageSize = 15;
     const cachedGames = await redis.get(`gamesList_page_${page}`);
 
     if (cachedGames) {

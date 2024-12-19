@@ -35,7 +35,7 @@ export default function ForumDetails() {
         ))}
       </ul>
       <Link href={`/forum/${forumId}/create`}>
-        <a className={styles.formButton}>Create a New Thread</a>
+        Create a New Thread
       </Link>
     </div>
   );

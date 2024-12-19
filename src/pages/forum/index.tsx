@@ -12,7 +12,12 @@ export default function ForumList() {
     async function fetchForums() {
       const response = await fetch("/api/forum");
       const data = await response.json();
-      setForums(data);
+      const { forums } = data
+      if(forums) {
+        setForums(forums)
+      } else {
+        setForums(data);
+      }
     }
     fetchForums();
   }, []);
@@ -48,7 +53,7 @@ export default function ForumList() {
       <ul className="space-y-4">
         {forums.map((forum: any) => (
           <li key={forum._id} className="bg-white shadow rounded-md p-4 hover:bg-gray-50 transition duration-200">
-            <Link href={`/forum/${forum._id}`} className="text-lg font-semibold text-blue-600 hover:underline">
+            <Link href={`/forum/${forum._id}`} >
               {forum.name}
             </Link>
           </li>

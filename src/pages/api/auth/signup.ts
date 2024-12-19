@@ -1,29 +1,28 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import bcrypt from 'bcrypt';
 import { users } from '@/lib/mongoCollections';
+import { createUserWithEmailAndPassword} from 'firebase/auth';
+import { auth } from "@/lib/firebase"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-      const { email, password } = req.body;
-  
+      const { email, password } = req.body;  
       console.log("check")
       console.log('Received:', { email, password }); // Log incoming data
         
       try {
+        const createdUser = await createUserWithEmailAndPassword(auth, email, password);
+        const fbUser = createdUser.user;
+
         const usersCollection = await users();
         console.log('Connected to users collection.');
-  
-        // Additional logging before insertion
-        const hashedPassword = await bcrypt.hash(password, 10);
-        console.log('Password hashed.');
 
         const favoriteGames: never[] = [];
         const reviews: never[] = [];
         const gamesList : never[] = [];
-  
-        const result = await usersCollection.insertOne({ email, password: hashedPassword, favoriteGames, reviews, gamesList });
+        const forumsList : never[] = [];
+
+        const result = await usersCollection.insertOne({ firebaseId: fbUser.uid, email: fbUser.email, favoriteGames, reviews, gamesList, forumsList });
         console.log('User inserted:', result);
-  
         res.status(201).json({ message: 'User created successfully.' });
       } catch (error) {
         console.error('Error during signup:', error);

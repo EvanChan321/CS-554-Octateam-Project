@@ -53,11 +53,6 @@ export default function Header() {
               Games
             </Link>
             {isLoggedIn && userId && (
-              <Link href={`/lists/${userId}`} className="text-white hover:text-gray-300">
-                My Lists
-              </Link>
-            )}
-            {isLoggedIn && userId && (
               <Link href={`/favorites/${userId}`} className="text-white hover:text-gray-300">
                 Favorite Games
               </Link>

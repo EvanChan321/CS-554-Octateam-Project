@@ -50,43 +50,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!gameId) {
         return res.status(400).json({ success: false, message: 'Game ID is required' });
       }
-  
+
       const rawCookies = req.headers.cookie || '';
       const cookies = parseCookies(rawCookies);
       const session = cookies.session;
-  
+
       if (!session) {
         return res.status(401).json({ success: false, message: 'Unauthorized: No session found' });
       }
-  
+
       const sessionData = await decrypt(session);
       if (!sessionData || !sessionData.userId) {
         return res.status(401).json({ success: false, message: 'Unauthorized: Invalid session' });
       }
 
-        const gameResponse = await fetch(`http://localhost:3000/api/games/${gameId}`);
-        const gameData = await gameResponse.json();
-  
+      const gameResponse = await fetch(`http://localhost:3000/api/games/${gameId}`);
+      const gameData = await gameResponse.json();
+
       if (!gameData || !gameData.success) {
         return res.status(404).json({ success: false, message: 'Game not found' });
       }
 
-      console.log(gameData);
-  
       const usersCollection = await users();
       const user = await usersCollection.findOne({ _id: new ObjectId(sessionData.userId) });
-  
+
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
-  
+
       // Check if the game is already in favorites
       const isGameAlreadyFavorite = user.favoriteGames?.some((game: any) => game.gameId === gameId);
       if (isGameAlreadyFavorite) {
         return res.status(400).json({ success: false, message: 'Game is already in your favorites' });
       }
-  
- 
+
       await usersCollection.updateOne(
         { _id: new ObjectId(sessionData.userId) },
         {
@@ -102,24 +99,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         }
       );
-  
+
       redis.del(`favorites/${sessionData.userId}`);
-  
+
       res.status(200).json({ success: true, message: 'Game added to favorites' });
     } catch (error) {
       console.error('Error adding game to favorites:', error);
       res.status(500).json({ success: false, message: 'Failed to add game to favorites' });
     }
+  } else if (req.method === 'DELETE') {
+    console.log('hi');
+    try {
+      const { gameId } = req.body;
+      if (!gameId) {
+        return res.status(400).json({ success: false, message: 'Game ID is required' });
+      }
+
+      const rawCookies = req.headers.cookie || '';
+      const cookies = parseCookies(rawCookies);
+      const session = cookies.session;
+
+      if (!session) {
+        return res.status(401).json({ success: false, message: 'Unauthorized: No session found' });
+      }
+
+      const sessionData = await decrypt(session);
+      if (!sessionData || !sessionData.userId) {
+        return res.status(401).json({ success: false, message: 'Unauthorized: Invalid session' });
+      }
+
+      const usersCollection = await users();
+      const user = await usersCollection.findOne({ _id: new ObjectId(sessionData.userId) });
+
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      const result = await usersCollection.updateOne(
+        { _id: new ObjectId(sessionData.userId) },
+        { $pull: { favoriteGames: { gameId } } }
+      );
+
+      if (result.modifiedCount === 0) {
+        return res.status(404).json({ success: false, message: 'Game not found in favorites' });
+      }
+
+      redis.del(`favorites/${sessionData.userId}`);
+
+      res.status(200).json({ success: true, message: 'Game removed from favorites' });
+    } catch (error) {
+      console.error('Error removing game from favorites:', error);
+      res.status(500).json({ success: false, message: 'Failed to remove game from favorites' });
+    }
   } else {
-    res.setHeader('Allow', ['GET', 'POST']);
+    res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
     res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
-  
-  function parseCookies(cookieString: string) {
-    return cookieString.split(';').reduce((acc: Record<string, string>, cookie) => {
-      const [key, value] = cookie.trim().split('=');
-      acc[key] = decodeURIComponent(value);
-      return acc;
-    }, {});
-  }
+}
+
+function parseCookies(cookieString: string) {
+  return cookieString.split(';').reduce((acc: Record<string, string>, cookie) => {
+    const [key, value] = cookie.trim().split('=');
+    acc[key] = decodeURIComponent(value);
+    return acc;
+  }, {});
 }

@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "@/styles/Forum.module.css";
 
 export default function ThreadList() {
   const router = useRouter();
@@ -20,12 +19,15 @@ export default function ThreadList() {
   }, [forumId]);
 
   return (
-    <div className={styles.forumContainer}>
-      <h1 className={styles.forumTitle}>Threads</h1>
-      <ul className={styles.threadList}>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Threads</h1>
+      <ul className="space-y-4">
         {threads.map((thread: any) => (
-          <li key={thread._id} className={styles.threadItem}>
-            <Link href={`/forum/${forumId}/threads/${thread._id}`}>
+          <li key={thread._id} className="border-b pb-4">
+            <Link
+              href={`/forum/${forumId}/threads/${thread._id}`}
+              className="text-xl font-semibold text-blue-600 hover:text-blue-800"
+            >
               {thread.title}
             </Link>
           </li>
@@ -33,4 +35,5 @@ export default function ThreadList() {
       </ul>
     </div>
   );
+  
 }

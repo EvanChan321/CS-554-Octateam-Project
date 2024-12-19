@@ -1,1 +1,0 @@
-// Dynamic route: Single list with ratings and comments

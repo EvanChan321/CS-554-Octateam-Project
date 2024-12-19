@@ -15,7 +15,7 @@ const UserProfile = () => {
       const fetchUserData = async () => {
         try {
           const response = await axios.get(`/api/user/${userId}`);
-          setUserData(response.data.user); // Set user data in the state
+          setUserData(response.data.user); 
         } catch (error) {
           console.error('Error fetching user data:', error);
           setError('Failed to load user data');

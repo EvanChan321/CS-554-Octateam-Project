@@ -60,6 +60,11 @@ export default function Home() {
     }
   };
 
+  // Placeholder function for onAddToList
+  const handleAddToList = (gameId: string) => {
+    console.log(`Game added to list: ${gameId}`);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -83,6 +88,7 @@ export default function Home() {
                   title={game.name}
                   imageUrl={game.background_image}
                   rating={game.rating}
+                  onAddToList={() => handleAddToList(game.gameId)} // Pass the function
                 />
               ))}
             </div>

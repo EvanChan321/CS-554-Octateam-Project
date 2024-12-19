@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import styles from "@/styles/Forum.module.css";
 
-export default function CreateThread() {
+interface CreateThreadProps {
+  forumId: string;
+  handleNewThread: (newThread: any) => void; 
+}
+
+export default function ({ forumId, handleNewThread }: CreateThreadProps) {
   const router = useRouter();
-  const { forumId } = router.query;
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -21,35 +23,36 @@ export default function CreateThread() {
 
       if (response.ok) {
         router.push(`/forum/${forumId}`);
+        handleNewThread(await response.json());
       }
     } catch (error) {
       console.error("Error creating thread:", error);
     }
-  };
+  };  
 
   return (
-    <div className={styles.forumContainer}>
-      <h1 className={styles.forumTitle}>Create a Thread</h1>
-      <form className={styles.formContainer} onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className={styles.formInput}
-          placeholder="Thread Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          className={styles.formTextarea}
-          placeholder="Thread Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        />
-        <button className={styles.formButton} type="submit">
-          Create
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Thread Title"
+        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      />
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Thread Content"
+        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      />
+      <button
+        type="submit"
+        className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
+      >
+        Create Thread
+      </button>
+    </form>
   );
 }

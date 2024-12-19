@@ -10,15 +10,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { title, content, createdBy } = req.body;
 
     if (!title || !content || !createdBy) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ message: 'Title, content, and createdBy are required.' });
     }
+  
+    // Ensure all fields are strings
+    if (
+      typeof title !== 'string' || 
+      typeof content !== 'string' || 
+      typeof createdBy !== 'string'
+    ) {
+      return res.status(400).json({ message: 'All fields must be strings.' });
+    }
+  
+    // Trim inputs
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
+    const trimmedCreatedBy = createdBy.trim();
+  
+    // Validate title length (e.g., between 3 and 100 characters)
+    if (trimmedTitle.length < 3 || trimmedTitle.length > 100) {
+      return res.status(400).json({ message: 'Title must be between 3 and 100 characters long.' });
+    }
+  
+    // Validate content length (e.g., between 20 and 2000 characters)
+    if (trimmedContent.length < 20 || trimmedContent.length > 2000) {
+      return res.status(400).json({ message: 'Content must be between 20 and 2000 characters long.' });
+    }
+  
 
     const thread = {
       _id: new ObjectId(),
-      title,
-      content,
+      title: trimmedTitle,
+      content: trimmedContent,
       createdAt: new Date(),
-      createdBy,
+      createdBy: trimmedCreatedBy,
       comments: [],
     };
 

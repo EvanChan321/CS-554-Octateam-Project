@@ -36,14 +36,14 @@ export default function ({ forumId, handleNewThread }: CreateThreadProps) {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Thread Title"
+        placeholder="Title must be between 3 and 100 characters long."
         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         required
       />
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Thread Content"
+        placeholder="Content must be between 20 and 2000 characters long."
         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         required
       />

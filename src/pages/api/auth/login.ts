@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ message: 'Invalid email or password.' });
       }
 
-      const session = await encrypt({ firebaseId: user.firebaseId, user: user.email });
+      const session = await encrypt({ userId: user._id, user: user.email });
       // Set a session cookie (no Max-Age or Expires, so it expires when the browser is closed)
       res.setHeader(
         'Set-Cookie',

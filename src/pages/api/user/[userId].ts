@@ -1,10 +1,14 @@
 import { users } from '@/lib/mongoCollections';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { decrypt } from '../../../../lib/sessions';
+import { ObjectId } from 'mongodb';
+import redis from '@/lib/redis';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
+
+
       const rawCookies = req.headers.cookie || '';
       const cookies = parseCookies(rawCookies);
 
@@ -12,18 +16,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!session) {
         return res.status(401).json({ success: false, message: 'Unauthorized: No session found' });
       }
-
       const sessionData = await decrypt(session);
-      if (!sessionData || !sessionData.firebaseId) {
+      
+      if (!sessionData || !sessionData.userId) {
         return res.status(401).json({ success: false, message: 'Unauthorized: Invalid session' });
       }
 
+      const cachedUser = await redis.get(`user/${sessionData.userId}`);
+      if (cachedUser) {
+        return res.status(200).json({ success: true, user: cachedUser });
+      }
+
       const usersCollection = await users();
-      const user = await usersCollection.findOne({ firebaseId: sessionData.firebaseId });
+      const objId = new ObjectId(sessionData.userId)
+      const user = await usersCollection.findOne({ _id: objId });
 
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
+
+      redis.set(`user/${sessionData.userId}`, user);
 
       res.status(200).json({ success: true, user });
     } catch (error: any) {
